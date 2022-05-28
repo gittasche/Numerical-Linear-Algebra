@@ -2,6 +2,7 @@ import numpy as np
 
 def gauss_jordan(A, b):
     '''
+    A is (n, n) non-singular matrix
     Equation Ax = b
     Parameters:
     ------------

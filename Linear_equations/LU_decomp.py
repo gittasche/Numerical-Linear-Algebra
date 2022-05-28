@@ -30,6 +30,28 @@ def doolittle(A):
 
     return L, U
 
+def cholesky(A):
+    '''
+    A is positive define (n, n) matrix
+    Decomposition A = LLt,
+    where L left-bottom triange with ones on diagonal
+    and Lt is transposed L
+    Parameters:
+    ------------
+    A - square (n, n) size matrix
+    '''
+    n = A.shape[0]
+    L = np.zeros((n, n))
+
+    L[0, 0] = np.sqrt(A[0, 0])
+    L[1:, 0] = A[1:, 0]/L[0, 0]
+
+    for i in range(1, n):
+        L[i, i] = np.sqrt(A[i, i] - np.dot(L[i, :i], L.T[:i, i]))
+        L[i+1:, i] = (A[i+1:, i] - np.dot(L[i+1:, :i], L.T[:i, i]))/L[i, i]
+
+    return L, L.T
+
 def LU_solve(A, b):
     '''
     Equation Ax = b

@@ -2,7 +2,7 @@ import numpy as np
 
 def LDLt(A):
     '''
-    A is positive defined (n, n) matrix
+    A is positive define (n, n) matrix
     Decomposition A = LDLt,
     where L left-bottom triange with ones on diagonal,
     Lt is transposed L
