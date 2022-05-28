@@ -2,6 +2,7 @@ import numpy as np
 
 def doolittle(A):
     '''
+    A is non-singular (n, n) matrix
     Decomposition A = LU,
     where L left-bottom triange with ones on diagonal
     and U right-upper triangle
