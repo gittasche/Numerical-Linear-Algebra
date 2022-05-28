@@ -9,7 +9,7 @@ def gauss_jordan(A, b):
     b - n size column
     x - n size column
     '''
-    n = len(b)
+    n = b.shape[0]
     block = np.c_[A, b].astype(np.float64)
     for i in range(n - 1):
 
