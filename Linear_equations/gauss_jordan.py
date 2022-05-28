@@ -1,6 +1,6 @@
 import numpy as np
 
-def gauss_elim(A, b):
+def gauss_jordan(A, b):
     '''
     Equation Ax = b
     Parameters:
@@ -28,11 +28,13 @@ def gauss_elim(A, b):
     if block[-1, -2] == 0:
         print('No unique solution')
         return
-    
-    # backward substitution
-    x = np.zeros(n)
-    x[-1] = block[-1, -1]/block[-1, -2]
+
+    # diagonalizing matrix
     for i in range(n-2, -1, -1):
-        x[i] = (block[i, -1] - np.dot(block[i, i:-1], x[i:]))/block[i, i]
+        coefs = np.array([block[i, k]/block[k, k] for k in range(i+1, n)])
+        block[i, -1] -= np.dot(coefs, block[i+1:, -1])
+    
+    block[:, :-1] = np.diag(np.diag(block[:, :-1]))
+    x = block[:, -1]/np.diag(block[:, :-1])
 
     return x
