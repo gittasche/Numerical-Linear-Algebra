@@ -24,8 +24,7 @@ def gauss_elim(A, b):
             block[[i, p]] = block[[p, i]]
         
         # elimination process
-        block[i+1:] -= block[i+1:, i, np.newaxis] @ block[np.newaxis, i]/block[i, i]
-        
+        block[i+1:] -= np.outer(block[i+1:, i], block[i])/block[i, i]
     if block[-1, -2] == 0:
         print('No unique solution')
         return

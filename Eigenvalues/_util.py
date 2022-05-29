@@ -94,3 +94,37 @@ def LU_solve(A, b):
         x[i] = (y[i] - np.dot(U[i, i:], x[i:]))/U[i, i]
     
     return x
+
+def aitken(A, x, tol, MAX_ITER):
+    '''
+    Aitken boosting for power method
+    Parameters:
+    -----------
+    A - (n, n) matrix
+    x - n size column approximate eigenvector
+    tol - tolerance value
+    MAX_ITER - maximum iterations number
+    '''
+    k = 1
+    u0 = u1 = 0
+    p = np.argmax(np.abs(x))
+    x /= x[p]
+    while k <= MAX_ITER:
+        y = np.dot(A, x)
+        u = y[p]
+        if (u - u1 + u0) == 0:
+            print(k)
+        u_ = u0 - (u1 - u0)**2/(u - u1 + u0)
+        p = np.argmax(np.abs(y))
+        if y[p] == 0.0:
+            print ('Eigenvector x have eigenvalue 0')
+            return x, 0
+        err = np.linalg.norm(x - y/y[p], ord=np.inf)
+        x = y/y[p]
+        if err < tol and k >= 4:
+            return x, u_
+        k += 1
+        u0 = u1
+        u1 = u
+    print('Maximum iterations exceeded')
+    return
