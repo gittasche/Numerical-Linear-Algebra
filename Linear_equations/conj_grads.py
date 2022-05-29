@@ -42,4 +42,4 @@ def conj_grads(A, b, C, x0, tol, MAX_ITER):
         k += 1
 
     print('Maximum iterations exceeded')
-    return x, r
+    return
