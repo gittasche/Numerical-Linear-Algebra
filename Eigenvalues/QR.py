@@ -94,12 +94,12 @@ def QR_decomp(a, b, tol, MAX_ITER):
                 y[j] = g[j]*b_k[j]
         z[-1] = x[-1]
 
-        # modifing main diagonal a
+        # modifying main diagonal a
         a_k[0] = s[1]*q[0] + g[1]*z[0]
         a_k[1:-1] = s[2:]*q[1:] + g[1:-1]*g[2:]*z[1:-1]
         a_k[-1] = g[-1]*z[-1]
 
-        # modifing adjecent diagonals b
+        # modifying adjecent diagonals b
         b_k = s[1:]*z[1:]
 
         # R matrix to return
