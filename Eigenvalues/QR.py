@@ -1,7 +1,6 @@
 import numpy as np
 
-def QR_decomp(a, b, tol, MAX_ITER):
-    #TODO: impement calculation of Q matrix
+def QR_lams(a, b, tol, MAX_ITER):
     '''
     QR method for finding the eigenvalues
     of (n,n) symmetric tridiagonal matrix.
@@ -35,7 +34,7 @@ def QR_decomp(a, b, tol, MAX_ITER):
             b_k = np.delete(b_k, -1)
             n -= 1
             if n == 0:
-                return lams, R
+                return lams
         
         if np.abs(b_k[0]) < tol:
             lams = np.append(lams, a_k[0] + SHIFT)
@@ -43,11 +42,11 @@ def QR_decomp(a, b, tol, MAX_ITER):
             b_k = np.delete(b_k, 0)
             n -= 1
             if n == 0:
-                return lams, R
+                return lams
 
         if n == 1:
             lams = np.append(lams, a_k[0] + SHIFT)
-            return lams, R
+            return lams
 
         b = -(a_k[-2] + a_k[-1])
         c = a_k[-1]*a_k[-2] - b_k[-1]**2
@@ -59,7 +58,7 @@ def QR_decomp(a, b, tol, MAX_ITER):
 
         if n == 2:
             lams = np.append(lams, u + SHIFT)
-            return lams, R
+            return lams
 
         sigma = u[np.argmin(np.abs(u - a_k[-1]))]
         SHIFT += sigma
@@ -100,9 +99,6 @@ def QR_decomp(a, b, tol, MAX_ITER):
         # modifying adjecent diagonals b
         b_k = s[1:]*z[1:]
 
-        # R matrix to return
-        R = np.diag(z) + np.diag(q, k=1) + np.diag(r, k=2)
-
         k += 1
     print('Maximum iterations exceeded')
     return
@@ -110,7 +106,7 @@ def QR_decomp(a, b, tol, MAX_ITER):
 def QR_parts(a, b, tol, MAX_ITER):
     '''
     QR method for eigenvalues, but it returns
-    generator to obtain eigenvalues by parts.
+    generator to obtain eigenvalues by one.
     (Purpose of this function is a yield practice)
 
     QR method for finding the eigenvalues
@@ -217,3 +213,58 @@ def QR_parts(a, b, tol, MAX_ITER):
         k += 1
     print('Maximum iterations exceeded')
     return
+
+
+def QR_decomp(a, b):
+    '''
+    Implementation of QR decomposition
+    of trdiagonal square (n,n) matrix.
+    This function doesn't return eigenvalues,
+    only Q and R matrices.
+
+    Parameters:
+    -----------
+    a - main diagonal of input matrix
+    b - adjecent diagonals to a
+
+    If you have tridiagonal matrix A put
+    a = np.diag(A) and b = np.diag(A, k=1)
+    '''
+    n = a.shape[0]
+    Q = np.identity(n)
+
+    # temp arrays
+    x = np.zeros(n)
+    y = np.zeros(n)
+
+    # elements of rotation matrices
+    g = np.zeros(n)
+    s = np.zeros(n)
+
+    # diags of R matrix
+    z = np.zeros(n)
+    q = np.zeros(n-1)
+    r = np.zeros(n-2)
+
+    x[0] = a[0]
+    y[0] = b[0]
+    for j in range(1, n):
+        z[j-1] = np.sqrt(x[j-1]**2 + b[j-1]**2)
+        g[j] = x[j-1]/z[j-1]
+        s[j] = b[j-1]/z[j-1]
+        q[j-1] = g[j]*y[j-1] + s[j]*a[j]
+        x[j] = -s[j]*y[j-1] + g[j]*a[j]
+        if j != n-1:
+            r[j-1] = s[j]*b[j]
+            y[j] = g[j]*b[j]
+
+        # calculating Q matrix
+        P_j = np.identity(n)
+        P_j[j-1:j+1, j-1:j+1] = np.array([[g[j], -s[j]], [s[j], g[j]]])
+        Q = Q @ P_j
+    z[-1] = x[-1]
+
+    # calculating R matrix
+    R = np.diag(z) + np.diag(q, k=1) + np.diag(r, k=2)
+    
+    return Q, R
