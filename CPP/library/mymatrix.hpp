@@ -340,6 +340,10 @@ double mynorm(const mymatrix<T> &mat, const char *ord)
                 if (fabs(mat[i][j]) > result)
                     result = fabs(mat[i][j]);
     }
+    else
+    {
+        throw("Only L2, L1, Linf ord norm possible.");
+    }
     return result;
 }
 
