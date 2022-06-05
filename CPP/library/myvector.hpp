@@ -4,6 +4,7 @@
 #include <istream>
 #include <ostream>
 #include <cmath>
+#include <vector>
 
 #include "mymatrix.hpp"
 
@@ -34,6 +35,7 @@ public:
 	myvector();
 	myvector(int n);
 	myvector(int n, const T& a);
+	myvector(int n, const std::vector<T> a);
 	myvector(const myvector& vec);
 
 	inline myvector& operator=(const myvector& vec);
@@ -66,6 +68,12 @@ template <class T>
 myvector<T>::myvector(int n, const T& a) : n_(n), v(n > 0 ? new T[n] : nullptr) {
 	for (int i = 0; i < n; ++i)
 		v[i] = a;
+}
+
+template <class T>
+myvector<T>::myvector(int n, const std::vector<T> a) : n_(n), v(n > 0 ? new T[n] : nullptr) {
+	for (int i = 0; i < n; ++i)
+		v[i] = a[i];
 }
 
 template <class T>
@@ -246,6 +254,9 @@ myvector<T>::~myvector() {
 	if (v != nullptr)
 		delete[] v;
 }
+
+typedef std::vector<int> initvecint;
+typedef std::vector<double> initvecdoub;
 
 typedef myvector<int> vecint;
 typedef myvector<double> vecdoub;

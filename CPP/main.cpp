@@ -2,9 +2,8 @@
 #include "../CPP/library/mymatrix.hpp"
 
 #include <iostream>
+#include <vector>
 
 int main() {
-	matdoub mat(2, 2, 1);
-	std::cout << mynorm(mat);
 	return 0;
 }

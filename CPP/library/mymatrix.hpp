@@ -3,6 +3,7 @@
 
 #include <ostream>
 #include <cmath>
+#include <vector>
 
 #include "myvector.hpp"
 
@@ -30,10 +31,10 @@ public:
 	mymatrix();
 	mymatrix(int n, int m);
 	mymatrix(int n, int m, const T& a);
+    mymatrix(int n, int m, const std::vector<std::vector<T>> a);
 	mymatrix(const mymatrix& mat);
 
 	inline mymatrix& operator=(const mymatrix& mat);
-	typedef T value_type;
 	inline T* operator[](const int i);
 	inline const T* operator[](const int i) const;
 	inline mymatrix operator+(const mymatrix& mat) const;
@@ -75,6 +76,18 @@ mymatrix<T>::mymatrix(int n, int m, const T& a) : n_(n), m_(m), v(n > 0 ? new T*
 	for (int i = 0; i < n; ++i)
 		for (int j = 0; j < m; ++j)
 			v[i][j] = a;
+}
+
+template <class T>
+mymatrix<T>::mymatrix(int n, int m, const std::vector<std::vector<T>> a) : n_(n), m_(m), v(n > 0 ? new T*[n] : nullptr) {
+	int size = n * m;
+	if (v)
+		v[0] = size > 0 ? new T[size] : nullptr;
+	for (int i = 1; i < n; ++i)
+		v[i] = v[i - 1] + m;
+	for (int i = 0; i < n; ++i)
+		for (int j = 0; j < m; ++j)
+			v[i][j] = a[i][j];
 }
 
 template <class T>
@@ -297,6 +310,9 @@ mymatrix<T>::~mymatrix() {
 		delete[] v;
 	}
 }
+
+typedef std::vector<std::vector<int>> initmatint;
+typedef std::vector<std::vector<double>> initmatdoub;
 
 typedef mymatrix<int> matint;
 typedef mymatrix<double> matdoub;
