@@ -1,12 +1,8 @@
 #ifndef MYVECTOR_H
 #define MYVECTOR_H
 
-#include <istream>
-#include <ostream>
-#include <cmath>
-#include <vector>
-
 #include "mymatrix.hpp"
+#include "util.hpp"
 
 template <typename T>
 class myvector;
@@ -134,17 +130,17 @@ const T &myvector<T>::operator[](const int i) const
 template <class T>
 myvector<T> myvector<T>::operator+(const myvector &vec) const
 {
-	myvector temp(*this);
-	temp += vec;
-	return temp;
+	std::unique_ptr<myvector> temp(new myvector(*this));
+	*temp += vec;
+	return *temp;
 }
 
 template <class T>
 myvector<T> myvector<T>::operator-(const myvector &vec) const
 {
-	myvector temp(*this);
-	temp += vec;
-	return temp;
+	std::unique_ptr<myvector> temp(new myvector(*this));
+	*temp -= vec;
+	return *temp;
 }
 
 template <class T>
@@ -264,7 +260,7 @@ double mynorm(const myvector<T> &vec, const char *ord)
 	if (ord == "L2")
 	{
 		for (int i = 0; i < vec.n_; ++i)
-			result += vec[i] * vec[i];
+			result += SQR(vec[i]);
 		return sqrt(result);
 	}
 	else if (ord == "L1")
