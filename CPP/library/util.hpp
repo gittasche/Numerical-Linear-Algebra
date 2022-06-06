@@ -7,6 +7,8 @@
 #include <cmath>
 #include <vector>
 #include <memory>
+#include <exception>
+#include <stdexcept>
 
 template <typename T>
 inline void SWAP(T *a, T *b)

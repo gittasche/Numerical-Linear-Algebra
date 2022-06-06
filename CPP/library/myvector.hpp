@@ -110,7 +110,7 @@ T &myvector<T>::operator[](const int i)
 	}
 	catch (const char *s)
 	{
-		throw("Vector index is out of bounds.");
+		throw std::logic_error("Vector index is out of bounds.");
 	}
 }
 
@@ -123,7 +123,7 @@ const T &myvector<T>::operator[](const int i) const
 	}
 	catch (const char *s)
 	{
-		throw("Vector index is out of bounds.");
+		throw std::logic_error("Vector index is out of bounds.");
 	}
 }
 
@@ -147,7 +147,7 @@ template <class T>
 myvector<T> &myvector<T>::operator+=(const myvector &vec)
 {
 	if (n_ != vec.n_)
-		throw("Sum possible only for the vectors of same size.");
+		throw std::logic_error("Sum possible only for the vectors of same size.");
 	for (int i = 0; i < n_; ++i)
 		v[i] += vec[i];
 	return *this;
@@ -157,7 +157,7 @@ template <class T>
 myvector<T> &myvector<T>::operator-=(const myvector &vec)
 {
 	if (n_ != vec.n_)
-		throw("Sum possible only for the vectors of same size.");
+		throw std::logic_error("Sum possible only for the vectors of same size.");
 	for (int i = 0; i < n_; ++i)
 		v[i] -= vec[i];
 	return *this;
@@ -173,7 +173,7 @@ std::istream &operator>>(std::istream &is, myvector<T> &vec)
 	}
 	else
 	{
-		throw("Vector is nullptr.");
+		throw std::logic_error("Vector is nullptr.");
 	}
 	return is;
 }
@@ -232,7 +232,7 @@ double mydot(const myvector<T> &vec1, const myvector<T> &vec2)
 {
 	double result = 0;
 	if (vec1.n_ != vec2.n_)
-		throw("Dot product possible only for vectors of the same size.");
+		throw std::logic_error("Dot product possible only for vectors of the same size.");
 	else
 	{
 		for (int i = 0; i < vec1.n_; ++i)
@@ -255,7 +255,7 @@ template <typename T>
 double mynorm(const myvector<T> &vec, const char *ord)
 {
 	if (vec.v == nullptr)
-		throw("Norm of undefined vector does not exist.");
+		throw std::logic_error("Norm of undefined vector does not exist.");
 	double result = 0;
 	if (ord == "L2")
 	{
@@ -278,7 +278,7 @@ double mynorm(const myvector<T> &vec, const char *ord)
 	}
 	else
 	{
-		throw("Only L2, L1, Linf ord norm possible.");
+		throw std::logic_error("Only L2, L1, Linf ord norm possible.");
 	}
 }
 

@@ -6,15 +6,34 @@
 #include "../util.hpp"
 
 void gaussj(matdoub &a, matdoub &b)
+/*
+Implementation of Gauss-Jordan elimination with full pivoting.
+Parameters:
+-----------
+Input:
+a: square (n,n) matrix
+b: (n,m) matrix
+
+Output:
+b: (n,m) solution matrix
+
+Runtime parameters:
+(irow, icol): position of pivoting element
+(indxr, indxc): contains structure of initial a matrix, not necessary for solving
+ipiv: history of pivoting
+max: need to find maximum absolute value in array
+pivinv: 1 / (pivot element)
+temp: temporary variable
+*/
 {
     int irow, icol, n = a.nrows(), m = b.ncols();
-    vecint indxc(n), indxr(n), ipiv(n, 0);
+    vecint indxr(n), indxc(n), ipiv(n, 0);
     double max, pivinv, temp;
     for (int i = 0; i < n; ++i)
     {
         max = 0.0;
         for (int j = 0; j < n; ++j)
-            if (ipiv[j] != 1)
+            if (ipiv[j] == 0)
                 for (int k = 0; k < n; ++k)
                 {
                     if (ipiv[k] == 0)
@@ -27,7 +46,7 @@ void gaussj(matdoub &a, matdoub &b)
                         }
                     }
                 }
-        ++(ipiv[icol]);
+        ipiv[icol] = 1;
 
         if (irow != icol)
         {
@@ -37,11 +56,11 @@ void gaussj(matdoub &a, matdoub &b)
                 SWAP(&b[irow][j], &b[icol][j]);
         }
         indxr[i] = irow;
-        indxr[i] = icol;
-        if (a[irow][icol] == 0.0)
-            throw("gaussj: Singular matrix.");
-        pivinv = 1.0/a[icol][irow];
-        a[icol][irow] = 1.0;
+        indxc[i] = icol;
+        if (a[icol][icol] == 0.0)
+            throw std::runtime_error("gaussj: Singular matrix.");
+        pivinv = 1.0/a[icol][icol];
+        a[icol][icol] = 1.0;
         for (int j = 0; j < n; ++j)
             a[icol][j] *= pivinv;
         for (int j = 0; j < m; ++j)

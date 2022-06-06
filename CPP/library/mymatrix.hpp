@@ -142,7 +142,7 @@ T *mymatrix<T>::operator[](const int i)
     }
     catch (const char *s)
     {
-        throw("Matrix index is out of bounds.");
+        throw std::logic_error("Matrix index is out of bounds.");
     }
 }
 
@@ -155,7 +155,7 @@ const T *mymatrix<T>::operator[](const int i) const
     }
     catch (const char *s)
     {
-        throw("Matrix index is out of bounds.");
+        throw std::logic_error("Matrix index is out of bounds.");
     }
 }
 
@@ -179,7 +179,7 @@ template <class T>
 mymatrix<T> &mymatrix<T>::operator+=(const mymatrix<T> &mat)
 {
     if (n_ != mat.n_ || m_ != mat.m_)
-        throw("Sum possible only for the matrices of same size.");
+        throw std::logic_error("Sum possible only for the matrices of same size.");
     for (int i = 0; i < mat.n_; ++i)
         for (int j = 0; j < mat.m_; ++j)
             v[i][j] += mat[i][j];
@@ -190,7 +190,7 @@ template <class T>
 mymatrix<T> &mymatrix<T>::operator-=(const mymatrix<T> &mat)
 {
     if (n_ != mat.n_ || m_ != mat.m_)
-        throw("Sum possible only for the matrices of same size.");
+        throw std::logic_error("Sum possible only for the matrices of same size.");
     for (int i = 0; i < mat.n_; ++i)
         for (int j = 0; j < mat.m_; ++j)
             v[i][j] -= mat[i][j];
@@ -289,7 +289,7 @@ mymatrix<T> mydot(const mymatrix<T> &mat1, const mymatrix<T> &mat2)
     mymatrix<T> result(mat1.n_, mat2.m_, 0);
     if (mat1.m_ != mat2.n_)
     {
-        throw("Matrix product impossible.");
+        throw std::logic_error("Matrix product impossible.");
     }
     else
     {
@@ -316,7 +316,7 @@ template <typename T>
 double mynorm(const mymatrix<T> &mat, const char *ord)
 {
     if (mat.v == nullptr)
-        throw("Norm of undefined matrix does not exist.");
+        throw std::logic_error("Norm of undefined matrix does not exist.");
     double result = 0;
     if (ord == "L2")
     {
@@ -339,7 +339,7 @@ double mynorm(const mymatrix<T> &mat, const char *ord)
     }
     else
     {
-        throw("Only L2, L1, Linf ord norm possible.");
+        throw std::logic_error("Only L2, L1, Linf ord norm possible.");
     }
     return result;
 }
