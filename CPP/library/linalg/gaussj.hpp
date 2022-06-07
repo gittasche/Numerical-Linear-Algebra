@@ -27,8 +27,8 @@ temp: temporary variable
 */
 {
     int irow, icol, n = a.nrows(), m = b.ncols();
-    vecint indxr(n), indxc(n), ipiv(n, 0);
     double max, pivinv, temp;
+    vecint indxr(n), indxc(n), ipiv(n, 0);
     for (int i = 0; i < n; ++i)
     {
         max = 0.0;

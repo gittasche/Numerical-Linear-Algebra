@@ -13,9 +13,9 @@
 template <typename T>
 inline void SWAP(T *a, T *b)
 {
-    T *temp = a;
-    a = b;
-    b = temp;
+    T temp = *a;
+    *a = *b;
+    *b = temp;
 }
 
 template <typename T>
