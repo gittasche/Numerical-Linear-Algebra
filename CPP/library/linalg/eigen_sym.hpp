@@ -51,7 +51,7 @@ void Jacobi::solve()
             return;
         }
         if (i < 4)
-            tresh = 0.2 * sum / (SQR(n));
+            tresh = 0.2 * sum / (n * n);
         else
             tresh = 0.0;
         for (int ip = 0; ip < n - 1; ++ip)
@@ -69,11 +69,11 @@ void Jacobi::solve()
                     else
                     {
                         theta = 0.5 * h / a[ip][iq];
-                        t = 1.0 / (fabs(theta) + sqrt(1.0 + SQR(t)));
+                        t = 1.0 / (fabs(theta) + sqrt(1.0 + theta * theta));
                         if (theta < 0.0)
                             t = -t;
                     }
-                    c = 1.0 / sqrt(1 + SQR(t));
+                    c = 1.0 / sqrt(1 + t * t);
                     s = t * c;
                     tau = s / (1.0 + c);
                     h = t * a[ip][iq];
@@ -84,6 +84,7 @@ void Jacobi::solve()
                     a[ip][iq] = 0.0;
                     for (int j = 0; j < ip; ++j)
                         rotate(a, s, tau, j, ip, j, iq);
+                        std::cout << a;
                     for (int j = ip + 1; j < iq; ++j)
                         rotate(a, s, tau, ip, j, j, iq);
                     for (int j = iq + 1; j < n; ++j)
@@ -101,7 +102,7 @@ void Jacobi::solve()
             z[ip] = 0.0;
         }
     }
-    std::cout << "Maximum iterations exceeded.";
+    std::cout << "Maximum iterations exceeded." << std::endl;
 }
 
 void rotate(matdoub &mat, const double s, const double tau, const int i, const int j, const int k, const int l)
