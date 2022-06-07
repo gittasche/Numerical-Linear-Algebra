@@ -9,6 +9,7 @@
 #include <memory>
 #include <exception>
 #include <stdexcept>
+#include <limits>
 
 template <typename T>
 inline void SWAP(T *a, T *b)

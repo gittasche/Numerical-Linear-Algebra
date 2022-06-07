@@ -46,6 +46,7 @@ public:
     inline int ncols() const;
     void resize(int newn, int newm);
     void assign(int newn, int newm, const T &a);
+    void identity();
     friend mymatrix<T> mydot<T>(const mymatrix<T> &mat1, const mymatrix<T> &mat2);
     friend mymatrix<T> myouter<T>(const mymatrix<T> &mat1, const mymatrix<T> &mat2);
     friend double mynorm<T>(const mymatrix<T> &mat, const char *ord);
@@ -281,6 +282,19 @@ void mymatrix<T>::assign(int newn, int newm, const T &a)
     for (int i = 0; i < n_; ++i)
         for (int j = 0; j < m_; ++j)
             v[i][j] = a;
+}
+
+template <class T>
+void mymatrix<T>::identity()
+{
+    if (n_ != m_)
+        throw std::runtime_error("Only square matrix can be identity.");
+    for (int i = 0; i < n_; ++i)
+    {
+        for (int j = 0; j < m_; ++j)
+            v[i][j] = 0;
+        v[i][i] = 1;
+    }
 }
 
 template <typename T>

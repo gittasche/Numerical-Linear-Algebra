@@ -59,7 +59,7 @@ temp: temporary variable
         indxc[i] = icol;
         if (a[icol][icol] == 0.0)
             throw std::runtime_error("gaussj: Singular matrix.");
-        pivinv = 1.0/a[icol][icol];
+        pivinv = 1.0 / a[icol][icol];
         a[icol][icol] = 1.0;
         for (int j = 0; j < n; ++j)
             a[icol][j] *= pivinv;
