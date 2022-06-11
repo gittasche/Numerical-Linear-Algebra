@@ -2,6 +2,7 @@
 #include "../CPP/library/mymatrix.hpp"
 #include "../CPP/library/linalg/gauss.hpp"
 #include "../CPP/library/linalg/eigen_sym.hpp"
+#include "../CPP/library/linalg/ludcmp.hpp"
 
 int main()
 {

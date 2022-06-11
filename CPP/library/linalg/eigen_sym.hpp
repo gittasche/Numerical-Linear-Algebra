@@ -151,6 +151,6 @@ void Jacobi::print_res(const char vecprint)
                       << vecs << std::endl;
     }
     else
-        std::cout << "Not solved.";
+        std::cout << "Not solved." << std::endl;
 }
 #endif
