@@ -17,9 +17,27 @@ public:
     LUdcmp(matdoub &a);
     vecdoub solve(vecdoub &b);
     matdoub solve(matdoub &b);
+    matdoub inverse();
+    double det();
 };
 
 LUdcmp::LUdcmp(matdoub &a) : n(a.nrows()), lu(a), indx(n)
+/*
+Implementation of LU decomposition.
+Parameters:
+-----------
+Input:
+a: square (n,n) matrix to be decomposed
+
+Output:
+lu: square (n,n) matrix contains both L and U matrices (Crout method)
+
+Runtime parameters:
+TINY: tiny double number which will be denominator instead of zero
+jmax: index of pivoting element
+max: pivoting element
+vv: temp vector of 1.0/max's
+*/
 {
     const double TINY = 1.0e-40;
     int jmax;
@@ -66,6 +84,7 @@ LUdcmp::LUdcmp(matdoub &a) : n(a.nrows()), lu(a), indx(n)
                 lu[j][k] -= lu[j][i] * lu[i][k];
         }
     }
+    std::cout << lu << std::endl;
 }
 
 vecdoub LUdcmp::solve(vecdoub &b)
@@ -118,6 +137,22 @@ matdoub LUdcmp::solve(matdoub &b)
     }
 
     return x;
+}
+
+matdoub LUdcmp::inverse()
+{
+    matdoub ainv(n, n);
+    ainv.identity();
+    ainv = solve(ainv);
+    return ainv;
+}
+
+double LUdcmp::det()
+{
+    double dd = d;
+    for (int i = 0; i < n; ++i)
+        dd *= lu[i][i];
+    return dd;
 }
 
 #endif
