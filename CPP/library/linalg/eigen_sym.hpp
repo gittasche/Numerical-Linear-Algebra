@@ -29,6 +29,34 @@ public:
 Jacobi::Jacobi(matdoub &aa, const int MAX_ITER) : n(aa.nrows()), a(aa), vecs(n, n), lams(n), nrot(0), EPS(std::numeric_limits<double>::epsilon()), MAX_ITER(MAX_ITER) {}
 
 void Jacobi::solve()
+/*
+Implementation of Jacobi rotation method
+for finding eigenvectors and eigenvalues of
+symmetric matrix.
+
+Parameters:
+-----------
+Input:
+a: symmetric square (n,n) matrix
+MAX_ITER: number of maximum iterations
+
+Output:
+vecs: matrix of normalized eigenvectors in columns
+lams: vector of eigenvectors
+
+Runtime parameters:
+sum: sum of above diagonal elements
+tresh: threshold value for convergence boosting
+g: off-diagonal element to check its magnitude
+h: temporary variable
+t: root of equation t^2 + 2*t*theta - 1 = 0
+theta: cot(2 * rotation_angle)
+c: diagonal coefs of rotation matrix (cos(rotation_angle))
+s: off-diagonal coefs of rotation matrix (sin(rotation_angle))
+tau: tan(rotation_angle / 2) equals s / (1 + c)
+b: temp vector
+z: temp vector
+*/
 {
     double sum, tresh, g, h, t, theta, c, s, tau;
     vecdoub b(n), z(n);
@@ -69,11 +97,11 @@ void Jacobi::solve()
                     else
                     {
                         theta = 0.5 * h / a[ip][iq];
-                        t = 1.0 / (fabs(theta) + sqrt(1.0 + theta * theta));
+                        t = 1.0 / (fabs(theta) + sqrt(1.0 + SQR(theta)));
                         if (theta < 0.0)
                             t = -t;
                     }
-                    c = 1.0 / sqrt(1 + t * t);
+                    c = 1.0 / sqrt(1 + SQR(t));
                     s = t * c;
                     tau = s / (1.0 + c);
                     h = t * a[ip][iq];
@@ -84,7 +112,6 @@ void Jacobi::solve()
                     a[ip][iq] = 0.0;
                     for (int j = 0; j < ip; ++j)
                         rotate(a, s, tau, j, ip, j, iq);
-                        std::cout << a;
                     for (int j = ip + 1; j < iq; ++j)
                         rotate(a, s, tau, ip, j, j, iq);
                     for (int j = iq + 1; j < n; ++j)
@@ -114,6 +141,14 @@ void rotate(matdoub &mat, const double s, const double tau, const int i, const i
 }
 
 void Jacobi::eigsrt(const char vecsort)
+/*
+Sorting eigenvalues and corresponding eigenvectors
+in descending order (insertion algorithm).
+
+Parameters:
+-----------
+vecsort: 'Y' if you need to sort eigenvectors
+*/
 {
     int k, n = lams.size();
     double p;
@@ -141,6 +176,13 @@ void Jacobi::eigsrt(const char vecsort)
 }
 
 void Jacobi::print_res(const char vecprint)
+/*
+Print results
+
+Parameters:
+-----------
+vecprint: 'Y' if you need to print eigenvectors
+*/
 {
     if (solved)
     {
