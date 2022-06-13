@@ -133,7 +133,11 @@ z: temp vector
 }
 
 void rotate(matdoub &mat, const double s, const double tau, const int i, const int j, const int k, const int l)
+/*
+Calculating [i][j] and [k][l] elements of transformed A matrix.
+*/
 {
+    // initialize temp variables.
     double g = mat[i][j];
     double h = mat[k][l];
     mat[i][j] = g - s * (h + g * tau);

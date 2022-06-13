@@ -24,6 +24,7 @@ public:
 LUdcmp::LUdcmp(matdoub &a) : n(a.nrows()), lu(a), indx(n)
 /*
 Implementation of LU decomposition.
+
 Parameters:
 -----------
 Input:
@@ -88,6 +89,13 @@ vv: temp vector of 1.0/max's
 }
 
 vecdoub LUdcmp::solve(vecdoub &b)
+/*
+Solve equation Ax = b with LU decomposition.
+
+Parameters:
+-----------
+b: n size vector right side of equation.
+*/
 {
     if (n != b.size())
         throw std::runtime_error("LUdcmp: Non-equal sizes.");
@@ -95,6 +103,9 @@ vecdoub LUdcmp::solve(vecdoub &b)
     int ip, ii = 0;
     double sum;
     vecdoub x(b);
+
+    // forward substitution solve of
+    // Ly = b, where y = Ux
     for (int i = 0; i < n; ++i)
     {
         ip = indx[i];
@@ -108,6 +119,8 @@ vecdoub LUdcmp::solve(vecdoub &b)
         x[i] = sum;
     }
 
+    // forward substitution solve of
+    // Ux = y
     for (int i = n - 1; i >= 0; --i)
     {
         sum = x[i];
@@ -120,6 +133,14 @@ vecdoub LUdcmp::solve(vecdoub &b)
 }
 
 matdoub LUdcmp::solve(matdoub &b)
+/*
+Solve equation AX = B with LU decomposition.
+It's number of m Ax = b equations.
+
+Parameters:
+-----------
+B: (n,m) size matrix right side of equation.
+*/
 {
     int m = b.ncols();
     if (n != b.nrows())
@@ -127,6 +148,9 @@ matdoub LUdcmp::solve(matdoub &b)
     
     vecdoub xx(n);
     matdoub x(n, m);
+
+    // Solving equations AX[:, i] = B[:, i] for i = 0, ..., m
+    // using previos LUdcmp::solve(b) (this function overloaded).
     for (int i = 0; i < m; ++i)
     {
         for (int j = 0; j < n; ++j)
@@ -140,6 +164,9 @@ matdoub LUdcmp::solve(matdoub &b)
 }
 
 matdoub LUdcmp::inverse()
+/*
+Calculating inverse matrix with LU decompostion.
+*/
 {
     matdoub ainv(n, n);
     ainv.identity();
@@ -148,6 +175,9 @@ matdoub LUdcmp::inverse()
 }
 
 double LUdcmp::det()
+/*
+Calculating determinant with LU decomposition.
+*/
 {
     double dd = d;
     for (int i = 0; i < n; ++i)
